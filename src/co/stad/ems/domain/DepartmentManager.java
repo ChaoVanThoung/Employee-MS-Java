@@ -12,8 +12,8 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 public class DepartmentManager {
-    private Employees employees;
-    private Integer department_id;
+    private Long employeeId;
+    private String department_id;
     private Date from_date;
     private Date to_date;
 }

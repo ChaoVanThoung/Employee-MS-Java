@@ -11,7 +11,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Employees_Title {
+public class Title {
     private Employees employees;
     private String title;
     private Date from_date;
