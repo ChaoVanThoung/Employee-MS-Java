@@ -12,8 +12,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ManageDepartments {
-
-    Integer count = 0;
     String id;
     Scanner scanner = new Scanner(System.in);
     DepartmentController departmentController = new DepartmentController();
@@ -42,7 +40,7 @@ public class ManageDepartments {
                 scanner.nextLine();
                 switch (menu){
                     case 1 -> addNewDepartment();
-                    case 2 -> System.out.println("Update Department");
+                    case 2 -> updateById();
                     case 3 -> searchByID();
                     case 4 -> deleteById();
                     case 5 -> showAllDepartments();
@@ -168,4 +166,40 @@ public class ManageDepartments {
             System.out.println("Department not found");
         }
     }
+
+    /* Update by id */
+    public void updateById(){
+        Department updatedDepartment = new Department();
+        System.out.println("""
+                \u001B[34m╔══════════════════════════════════════╗
+                ║             \u001B[36mUpdate By ID\u001B[34m             ║
+                ╚══════════════════════════════════════╝\u001B[0m
+                """);
+        while (true){
+            System.out.print("> Input department ID For Search: ");
+            id = scanner.nextLine();
+            if (id.length() == 4){
+                break;
+            } else {
+                System.out.println("Input must be 4 characters");
+            }
+        }
+        Department oldDepartment = departmentController.findById(id);
+        if (oldDepartment != null){
+            while (true){
+                System.out.println("Input name department name");
+                updatedDepartment.setDepartmentName(scanner.nextLine());
+         
+                if (updatedDepartment.getDepartmentName().length() <= 40 && updatedDepartment.getDepartmentName().matches("^[a-zA-Z\\s]+$")){
+                    departmentController.updateDepartment(id, updatedDepartment);
+                    break;
+                } else {
+                    System.out.println("Invalid input. Must be alphabet and 40 characters or fewer.");
+                }
+            }
+        } else {
+            System.out.println("Department not found");
+        }
+    }
+
 }

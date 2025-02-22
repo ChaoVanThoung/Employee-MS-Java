@@ -27,4 +27,7 @@ public class DepartmentController {
     public void deleteDepartment(String id){
         departmentService.deleteDepartmentById(id);
     }
+    public void updateDepartment(String id, Department department) {
+        departmentService.updateDepartmentById(id, department);
+    }
 }

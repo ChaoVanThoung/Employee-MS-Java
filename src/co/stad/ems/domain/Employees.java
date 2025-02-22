@@ -12,7 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 public class Employees {
-    private int id;
+    private Integer id;
     private Date birth_date;
     private String first_name;
     private String last_name;

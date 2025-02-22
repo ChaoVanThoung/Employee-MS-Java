@@ -7,7 +7,7 @@ import java.util.List;
 public interface DepartmentDao {
     List<Department> queryAllDepartments();
     void insertNewDepartment(Department department);
-    void updateDepartmentById(Integer id);
+    void updateDepartmentById(String id,Department department);
     void deleteDepartmentById(String id);
     Department searchDepartmentById(String id);
 }

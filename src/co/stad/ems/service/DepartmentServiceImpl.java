@@ -41,5 +41,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentDaoImpl.deleteDepartmentById(id);
     }
 
+    @Override
+    public void updateDepartmentById(String id, Department department) {
+        departmentDaoImpl.updateDepartmentById(id,department);
+    }
+
 
 }

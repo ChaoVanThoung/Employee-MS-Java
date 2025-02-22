@@ -3,6 +3,7 @@ package co.stad.ems.dao;
 import co.stad.ems.database.DbSingleton;
 import co.stad.ems.domain.Department;
 
+import javax.print.attribute.standard.PresentationDirection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +37,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
                 );
                 listDepartment.add(department);
             }
-
             return listDepartment;
         } catch (SQLException sqlException){
             System.out.println(sqlException.getMessage());
@@ -64,8 +64,22 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public void updateDepartmentById(Integer id) {
-
+    public void updateDepartmentById(String id, Department department) {
+        String sql = """
+                UPDATE "departments"
+                SET dept_name=?
+                WHERE id=?
+                """;
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, department.getDepartmentName());
+            preparedStatement.setString(2, id);
+            int rowsAffected = preparedStatement.executeUpdate();
+            String message = rowsAffected > 0 ? "Update Success" : "Update failed";
+            System.out.println(message);
+        }catch (SQLException sqlException){
+            System.out.println(sqlException.getMessage());
+        }
     }
 
     @Override

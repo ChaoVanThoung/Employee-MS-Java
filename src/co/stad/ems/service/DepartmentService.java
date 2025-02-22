@@ -9,4 +9,5 @@ public interface DepartmentService {
     List<Department> getAllDepartments();
     Department findDepartmentById(String id);
     void deleteDepartmentById(String id);
+    void updateDepartmentById(String id, Department department);
 }
