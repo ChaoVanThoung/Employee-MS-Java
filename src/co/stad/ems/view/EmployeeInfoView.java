@@ -114,8 +114,6 @@ public class EmployeeInfoView {
         }
     }
 
-
-
     private void listEmployees() {
         emp.listEmployees().forEach(System.out::println);
     }
@@ -140,10 +138,21 @@ public class EmployeeInfoView {
         System.out.print("Enter new last name: ");
         String lastName = input.nextLine().trim();
 
+        System.out.print("Enter employee gender (M/F): ");
+        char gender = input.next().charAt(0);
+        gender = Character.toUpperCase(gender);
+        input.nextLine(); // ✅ Fix: Consume the leftover newline
+
+        Date birthDate = getValidDate(input, "Enter new birth date (YYYY-MM-DD): ");
+        Date hireDate = getValidDate(input, "Enter new hire date (YYYY-MM-DD): ");
+
         Employees updatedEmployee = Employees.builder()
                 .id(id)
                 .firstName(firstName)
                 .lastName(lastName)
+                .gender(gender)
+                .birthDate(birthDate)
+                .hireDate(hireDate)
                 .build();
 
         emp.updateEmployee(id, updatedEmployee);

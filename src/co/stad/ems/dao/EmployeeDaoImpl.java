@@ -44,26 +44,47 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public void updateEmployee(int id, Employees updatedEmployee) {
-        String sql = """
-        UPDATE employees (birth_date, first_name, last_name, gender, hire_date)\s
-            VALUE (?, ?, ?, ?, ?);
-       \s""";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.setDate(2, updatedEmployee.getBirthDate());
-            preparedStatement.setString(3, updatedEmployee.getFirstName());
-            preparedStatement.setString(4, updatedEmployee.getLastName());
-            preparedStatement.setString(5, String.valueOf(updatedEmployee.getGender()));
-            preparedStatement.setDate(6, updatedEmployee.getHireDate());
+        String sqlSelect = "SELECT * FROM employees WHERE id = ?";
+        String sqlUpdate = """
+        UPDATE employees
+        SET birth_date = ?, first_name = ?, last_name = ?, gender = ?, hire_date = ?
+        WHERE id = ?;
+    """;
 
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows == 0) {
-                System.out.println("Update failed: No employee found with ID " + id);
+        try (PreparedStatement selectStmt = connection.prepareStatement(sqlSelect)) {
+            selectStmt.setInt(1, id);
+            ResultSet resultSet = selectStmt.executeQuery();
+
+            if (!resultSet.next()) {
+                System.out.println("Employee not found.");
+                return;
+            }
+
+            // Get existing values from database if new values are not provided
+//            Date birthDate = updatedEmployee.getBirthDate() != null ? updatedEmployee.getBirthDate() : resultSet.getDate("birth_date");
+//            String firstName = updatedEmployee.getFirstName() != null ? updatedEmployee.getFirstName() : resultSet.getString("first_name");
+//            String lastName = updatedEmployee.getLastName() != null ? updatedEmployee.getLastName() : resultSet.getString("last_name");
+//            String gender = updatedEmployee.getGender() != '\0' ? String.valueOf(updatedEmployee.getGender()) : resultSet.getString("gender");
+//            Date hireDate = updatedEmployee.getHireDate() != null ? updatedEmployee.getHireDate() : resultSet.getDate("hire_date");
+
+            // Now update with the proper values
+            try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
+                updateStmt.setDate(1, updatedEmployee.getBirthDate());
+                updateStmt.setString(2, updatedEmployee.getFirstName());
+                updateStmt.setString(3, updatedEmployee.getLastName());
+                updateStmt.setString(4, String.valueOf(updatedEmployee.getGender()));
+                updateStmt.setDate(5, updatedEmployee.getHireDate());
+                updateStmt.setInt(6, id);
+
+                int affectedRows = updateStmt.executeUpdate();
+                System.out.println(affectedRows != 0 ? "Updated employee successfully!" : "Update failed.");
             }
         } catch (SQLException sqlException) {
-            System.out.println(sqlException.getMessage());
+            System.out.println("SQL Error: " + sqlException.getMessage());
         }
     }
+
+
 
     @Override
     public void deleteEmployee(int id) {
@@ -133,6 +154,4 @@ public class EmployeeDaoImpl implements IEmployeeDao {
         }
         return employees;
     }
-
-
 }
