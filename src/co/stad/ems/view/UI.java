@@ -1,4 +1,4 @@
-package co.stad.ems.View;
+package co.stad.ems.view;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

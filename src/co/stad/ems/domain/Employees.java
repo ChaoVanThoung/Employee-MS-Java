@@ -1,21 +1,19 @@
 package co.stad.ems.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.sql.Date;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Employees {
     private int id;
-    private Date birth_date;
-    private String first_name;
-    private String last_name;
-    private Character gender;
-    private Date hire_date;
+    private String firstName;
+    private String lastName;
+    private Date birthDate;
+    private char gender;
+    private Date hireDate;
 }

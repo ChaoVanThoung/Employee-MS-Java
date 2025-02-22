@@ -1,4 +1,4 @@
-package co.stad.ems.View;
+package co.stad.ems.view;
 
 public class ManageDepartments {
 }

@@ -13,7 +13,7 @@ import java.sql.Date;
 @Builder
 public class Employees_Salary {
     private Employees employees;
-    private Date from_date;
+    private Date fromDate;
     private Integer amount;
-    private Date to_date;
+    private Date toDate;
 }
