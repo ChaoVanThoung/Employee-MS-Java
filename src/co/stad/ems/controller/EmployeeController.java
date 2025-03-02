@@ -3,7 +3,6 @@ package co.stad.ems.controller;
 import co.stad.ems.domain.Employees;
 import co.stad.ems.service.employee.EmployeeImpl;
 import co.stad.ems.service.employee.IEmployeeInfo;
-
 import java.util.List;
 
 public class EmployeeController {

@@ -1,12 +1,10 @@
 package co.stad.ems.dao;
 
-import co.stad.ems.dao.IEmployeeDao;
 import co.stad.ems.database.DbSingleton;
 import co.stad.ems.domain.Employees;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -60,14 +58,6 @@ public class EmployeeDaoImpl implements IEmployeeDao {
                 return;
             }
 
-            // Get existing values from database if new values are not provided
-//            Date birthDate = updatedEmployee.getBirthDate() != null ? updatedEmployee.getBirthDate() : resultSet.getDate("birth_date");
-//            String firstName = updatedEmployee.getFirstName() != null ? updatedEmployee.getFirstName() : resultSet.getString("first_name");
-//            String lastName = updatedEmployee.getLastName() != null ? updatedEmployee.getLastName() : resultSet.getString("last_name");
-//            String gender = updatedEmployee.getGender() != '\0' ? String.valueOf(updatedEmployee.getGender()) : resultSet.getString("gender");
-//            Date hireDate = updatedEmployee.getHireDate() != null ? updatedEmployee.getHireDate() : resultSet.getDate("hire_date");
-
-            // Now update with the proper values
             try (PreparedStatement updateStmt = connection.prepareStatement(sqlUpdate)) {
                 updateStmt.setDate(1, updatedEmployee.getBirthDate());
                 updateStmt.setString(2, updatedEmployee.getFirstName());
@@ -83,8 +73,6 @@ public class EmployeeDaoImpl implements IEmployeeDao {
             System.out.println("SQL Error: " + sqlException.getMessage());
         }
     }
-
-
 
     @Override
     public void deleteEmployee(int id) {
@@ -143,9 +131,9 @@ public class EmployeeDaoImpl implements IEmployeeDao {
                         resultSet.getInt("id"),
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
-                        birthDate,  // No need for conversion
+                        birthDate,
                         resultSet.getString("gender").charAt(0),
-                        hireDate   // No need for conversion
+                        hireDate
                 );
                 employees.add(employee);
             }

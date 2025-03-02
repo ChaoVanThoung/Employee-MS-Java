@@ -15,28 +15,18 @@ public class EmployeeImpl implements IEmployeeInfo {
     private IEmployeeDao employeeDao = new EmployeeDaoImpl();
 
     public void showMenu() {
-//        System.out.println("=================================| Manage Employees |=================================");
-//        System.out.println("1. Add Employee");
-//        System.out.println("2. View Employee List");
-//        System.out.println("3. Search & Filter Employee");
-//        System.out.println("4. Update Employee");
-//        System.out.println("5. Delete Employee");
-//        System.out.println("0. Exit");
-//        System.out.println("=====================================================================================");
-//        System.out.println("                                   >> SELECT AN OPTION <<                            ");
-//        System.out.println("=====================================================================================");
         System.out.println("""
-    \u001B[34m╔══════════════════════════════════════╗
-    ║         \u001B[36mManage Employees\u001B[34m           ║
-    ╠══════════════════════════════════════╣
-    ║       \u001B[33m1. Add Employee\u001B[34m          ║
-    ║       \u001B[33m2. View Employee List\u001B[34m           ║
-    ║       \u001B[33m3. Search Employee\u001B[34m                ║
-    ║       \u001B[33m4. Update Employee\u001B[34m                ║
-    ║       \u001B[33m5. Delete Employee\u001B[34m        ║
-    ║       \u001B[31m0. Exit\u001B[34m                        ║
-    ╚══════════════════════════════════════╝
-    \u001B[0m""");
+    ╔════════════════════════════════════════════════════════════════╗
+    ║                         Manage Employees                       ║
+    ╠════════════════════════════════════════════════════════════════╣
+    ║       1.➕ Add Employee                                        ║
+    ║       2.📋 View Employee List                                  ║
+    ║       3.🔎 Search Employee                                     ║
+    ║       4.📈 Update Employee                                     ║
+    ║       5. 🗑 Delete Employee                                     ║
+    ║       0.◀️ Exit                                                ║
+    ╚════════════════════════════════════════════════════════════════╝
+    """);
     }
 
     public void addEmployee(Employees employee) {

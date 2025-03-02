@@ -16,4 +16,10 @@ public class Employees {
     private Date birthDate;
     private char gender;
     private Date hireDate;
+
+    public Employees(int id) {
+        this.id = id;
+    }
 }
+
+

@@ -40,14 +40,14 @@ public class UI {
                 scanner.nextLine(); // Consume the newline to avoid input issues
 
                 switch (menu) {
-                    case 1 -> manageEmployeeInformation.menu();
+                    case 1 -> manageEmployeeInformation.displayEmployeeInfoManagement(scanner);
                     case 2 -> System.out.println("Manage Departments is under development.");
                     case 3 -> System.out.println("Manage Salary is under development.");
                     case 0 -> System.out.println("Exiting... Thank you!");
                     default -> System.out.println("Invalid option! Please enter a number between 0 and 3.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("\u001B[31m\u26A0 Input Only Numbers!!\u001B[0m"); // ⚠️ Warning sign in red
+                System.out.println("\u001B[31m⚠ Input Only Numbers!!\u001B[0m"); // ⚠️ Warning sign in red
                 System.out.println("\u001B[33m🔄 Please Try Again!\u001B[0m");
                 scanner.nextLine(); // Clear invalid input to prevent infinite loop
             }
