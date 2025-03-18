@@ -62,7 +62,6 @@ public class UI {
             try {
                 menu = scanner.nextInt();
                 scanner.nextLine(); // Consume the newline to avoid input issues
-                displayLoadingAnimation();
                 switch (menu) {
                     case 1 -> manageEmployeeInformation.menuEmployeeInformation();
                     case 2 -> manageDepartments.menuDepartments();
@@ -92,21 +91,7 @@ public class UI {
         System.out.println();
     }
 
-    private void displayLoadingAnimation() throws InterruptedException {
-        char[] spinner = {'|', '/', '-', '\\'};
-        String loadingText = "Loading ";
-        System.out.print(ANSI_GREEN + loadingText);
 
-        for (int i = 0; i < 20; i++) {
-            System.out.print(spinner[i % spinner.length]);
-            System.out.flush();
-            Thread.sleep(80);
-            System.out.print("\b");
-        }
-
-        // Clear "Loading " and spinner, then print "Done!"
-        System.out.print("\r" + "Done!      " + ANSI_RESET + "\n");
-    }
 
     public void progressBarLoading() {
         System.out.print("\u001B[33mLoading: \u001B[0m");

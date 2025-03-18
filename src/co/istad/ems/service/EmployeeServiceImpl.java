@@ -10,6 +10,7 @@ import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -99,9 +100,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
                 newEmployee.setId(id);
                 break;
-            } catch (InputMismatchException e) {
+            } catch (InputMismatchException | NumberFormatException e) {
                 System.out.println(YELLOW + "⚠️ Invalid ID format! Please enter a number." + RESET);
-                scanner.nextLine(); // Clear invalid input
+                 // Clear invalid input
             }
         }
 
@@ -123,10 +124,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             break;
         }
 
-        birthDate = getValidDate(scanner, BLUE + "Enter employee birth date (YYYY-MM-DD): " + RESET);
-        hireDate = getValidDate(scanner, BLUE + "Enter employee hire date (YYYY-MM-DD): " + RESET);
-
+        while (true){
+            birthDate = getValidDate(scanner, BLUE + "Enter employee birth date (YYYY-MM-DD): " + RESET);
+            Integer calBirth = LocalDate.now().getYear() - birthDate.toLocalDate().getYear();
+//            System.out.println(calBirth);
+            if (calBirth < 18){
+                System.out.println("age must be upper 18");
+                continue;
+            }
+            break;
+        }
         newEmployee.setBirthDate(birthDate);
+
+        hireDate = Date.valueOf(LocalDate.now());
         newEmployee.setHireDate(hireDate);
 
         employeeDaoImpl.addEmployee(newEmployee);
@@ -146,9 +156,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employees updatedEmployee = new Employees();
         while (true) {
-            System.out.print(BLUE + "Enter employee ID: " + RESET);
+            System.out.print(BLUE + "Enter employee ID (or 'e' to quit): " + RESET);
+            String idInput = scanner.nextLine();
+            if (idInput.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting update process..." + RESET);
+                return; // Exit the method
+            }
             try {
-                id = Integer.parseInt(scanner.nextLine());
+                id = Integer.parseInt(idInput);
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Input Only Number!!");
@@ -225,15 +240,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                 ╚══════════════════════════════════════╝\u001B[0m""");
         Integer id;
         while (true) {
-            System.out.print(BLUE + "Enter employee ID: " + RESET);
+            System.out.print(BLUE + "Enter employee ID (or 'e' to quit): " + RESET);
+            String input = scanner.nextLine().trim(); // Get input and remove leading/trailing spaces
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting update process..." + RESET);
+                return; // Exit the method
+            }
             try {
-                id = Integer.parseInt(scanner.nextLine());
-                employeeDaoImpl.deleteEmployee(id);
-                break;
+                id = Integer.parseInt(input);
+                break; // Exit the loop if parsing succeeds
             } catch (NumberFormatException e) {
-                System.out.println(YELLOW + "⚠️ Invalid ID format!" + RESET);
+                System.out.println(YELLOW + "⚠️ Invalid ID format! Please enter a number." + RESET);
             }
         }
+        employeeDaoImpl.deleteEmployee(id);
 
     }
 
@@ -323,23 +343,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employees findById() {
         System.out.println("""
-                \u001B[34m╔══════════════════════════════════════╗
-                ║       \u001B[33m \uD83D\uDD0E Search Employee    \u001B[34m        ║
-                ╚══════════════════════════════════════╝\u001B[0m""");
+            \u001B[34m╔══════════════════════════════════════╗
+            ║       \u001B[33m \uD83D\uDD0E Search Employee    \u001B[34m        ║
+            ╚══════════════════════════════════════╝\u001B[0m""");
         Integer id;
         Employees employees = new Employees();
         while (true) {
-            System.out.print(BLUE + "Enter employee ID: " + RESET);
+            System.out.print(BLUE + "Enter employee ID (or 'e' to quit): " + RESET);
+            String input = scanner.nextLine().trim(); // Capture input as string
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting search process..." + RESET);
+                return null; // Return null to indicate exit
+            }
             try {
-                id = Integer.parseInt(scanner.nextLine());
+                id = Integer.parseInt(input);
                 employees = employeeDaoImpl.searchById(id);
                 if (employees == null) {
                     System.out.println(YELLOW + "Employee with ID " + id + " not found!" + RESET);
                 } else {
-                    break;
+                    break; // Break loop if employee is found
                 }
             } catch (NumberFormatException e) {
-                System.out.println(YELLOW + "⚠️ Invalid ID format!" + RESET);
+                System.out.println(YELLOW + "⚠️ Invalid ID format! Please enter a number." + RESET);
             }
         }
         Table table = new Table(6, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL);

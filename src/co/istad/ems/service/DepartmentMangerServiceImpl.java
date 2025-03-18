@@ -11,7 +11,6 @@ import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
 import java.sql.Date;
-import java.sql.SQLOutput;
 import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -23,15 +22,22 @@ public class DepartmentMangerServiceImpl implements DepartmentManagerService{
     private final EmployeeDao employeeDaoImpl = new EmployeeDaoImpl();
     private final DepartmentDao departmentDaoImpl = new DepartmentDaoImpl();
 
+    public static final String GREEN = "\u001B[32m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String RED = "\u001B[31m";
+    public static final String BLUE = "\u001B[34m";
+    public static final String RESET = "\u001B[0m";
+
     Scanner scanner = new Scanner(System.in);
 
     public Date inputValidDate(Scanner scanner) {
-
         while (true) {
             String input = scanner.nextLine().trim();
             // Allow blank input for a null date (e.g., ongoing period)
             if (input.isEmpty()) {
-                return null;
+                System.out.println("can not null");
+                System.out.print("Please Inout: ");
+                continue;
             }
             try {
                 // Parse and return a valid date
@@ -141,9 +147,14 @@ public class DepartmentMangerServiceImpl implements DepartmentManagerService{
                 ╚══════════════════════════════════════╝\u001B[0m""");
         DepartmentManager newDepartmentManager = new DepartmentManager();
         while (true) {
+            System.out.print("Input Employee Id (or 'e' to quit): ");
+            String input = scanner.nextLine().trim(); // Capture input as string
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting process..." + RESET);
+                return; // Exit the method
+            }
             try {
-                System.out.print("Input Employee Id: ");
-                int employeeId = scanner.nextInt();
+                int employeeId = Integer.parseInt(input); // Parse after checking exit
                 Employees employees = employeeDaoImpl.searchById(employeeId);
                 if (employees == null) {
                     System.out.println("Employee not found");
@@ -156,8 +167,8 @@ public class DepartmentMangerServiceImpl implements DepartmentManagerService{
                 }
                 newDepartmentManager.setEmployeeId(employeeId);
                 break;
-            } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Input must be a number or 'e'");
             }
         }
         scanner.nextLine();
@@ -226,13 +237,19 @@ public class DepartmentMangerServiceImpl implements DepartmentManagerService{
                 ║     \u001B[36m♻️ Remove Department Manager\u001B[34m     ║
                 ╚══════════════════════════════════════╝\u001B[0m""");
         while (true) {
-            System.out.print("> Please Input Employee ID: ");
+            System.out.print("> Please Input Employee ID (or 'e' to quit): ");
+            String input = scanner.nextLine().trim();
+            System.out.println("DEBUG: Input received: '" + input + "'");
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting remove process..." + RESET);
+                return;
+            }
             try {
-                id = scanner.nextInt();
+                id = Integer.parseInt(input);
+                System.out.println("DEBUG: Parsed ID: " + id);
                 break;
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Input Only Number");
-                scanner.nextLine();
             }
         }
         Employees employees = employeeDaoImpl.searchById(id);
@@ -252,11 +269,18 @@ public class DepartmentMangerServiceImpl implements DepartmentManagerService{
                 ║             \u001B[36m🔄 Update Department Manager\u001B[34m             ║
                 ╚══════════════════════════════════════════════════════╝\u001B[0m""");
         while (true) {
-            System.out.print("> Please Input Employee ID: ");
+            System.out.print("> Please Input Employee ID (or 'e' to quit): ");
+            String input = scanner.nextLine().trim();
+            System.out.println("DEBUG: Employee ID input: '" + input + "'");
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting update process..." + RESET);
+                return;
+            }
             try {
-                id = scanner.nextInt();
-                break ;
-            }catch (InputMismatchException e) {
+                id = Integer.parseInt(input);
+                System.out.println("DEBUG: Parsed ID: " + id);
+                break;
+            } catch (NumberFormatException e) {
                 System.out.println("Input Only Number");
             }
         }
@@ -285,4 +309,6 @@ public class DepartmentMangerServiceImpl implements DepartmentManagerService{
             }
         }
     }
+
 }
+

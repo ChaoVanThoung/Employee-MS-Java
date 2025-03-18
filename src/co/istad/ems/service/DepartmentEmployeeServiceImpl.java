@@ -18,6 +18,12 @@ import java.util.Scanner;
 
 public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService {
 
+    public static final String GREEN = "\u001B[32m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String RED = "\u001B[31m";
+    public static final String BLUE = "\u001B[34m";
+    public static final String RESET = "\u001B[0m";
+
     private final EmployeeDao employeeDaoImpl = new EmployeeDaoImpl();
     private final DepartmentDao departmentDaoImpl = new DepartmentDaoImpl();
     private final DepartmentEmployeeDao departmentEmployeeDaoImpl = new DepartmentEmployeeDaoImpl();
@@ -29,9 +35,10 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     public Date inputValidDate(Scanner scanner) {
         while (true) {
             String input = scanner.nextLine().trim();
-            // Allow blank input for a null date (e.g., ongoing period)
             if (input.isEmpty()) {
-                return null;
+                System.out.println("can not null");
+                System.out.print("Please Inout: ");
+                continue;
             }
             try {
                 // Parse and return a valid date
@@ -52,8 +59,13 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         DepartmentEmployee newDepartmentEmployee = new DepartmentEmployee();
         while (true) {
             try {
-                System.out.print("Input Employee Id: ");
-                int employeeId = scanner.nextInt();
+                System.out.print("Input Employee Id (or 'e' to quit): ");
+                String employeeInput = scanner.nextLine().trim(); // Use nextLine for consistency
+                if (employeeInput.equalsIgnoreCase("e")) {
+                    System.out.println(YELLOW + "Exiting add process..." + RESET);
+                    return; // Exit the method
+                }
+                int employeeId = Integer.parseInt(employeeInput); // Parse after checking exit
                 Employees employees = employeeDaoImpl.searchById(employeeId);
                 if (employees != null) {
                     newDepartmentEmployee.setEmployeeId(employeeId);
@@ -61,8 +73,11 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
                 } else {
                     System.out.println("Employee not found");
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number or 'exit'.");
             } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Input mismatch error: " + e.getMessage());
+                scanner.nextLine(); // Clear buffer
             }
         }
         scanner.nextLine();
@@ -235,6 +250,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
 
     @Override
     public void searchByDepartmentId() {
+
         System.out.println("""
                 \u001B[34m╔══════════════════════════════════════╗
                 ║          \u001B[33m \uD83D\uDCC2 Search Department\u001B[34m       ║
@@ -287,13 +303,17 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
                 ║      \u001B[33m\u274C Delete By Employee ID\u001B[34m        ║
                 ╚══════════════════════════════════════╝\u001B[0m""");
         while (true) {
-            System.out.print("> Please Input Employee ID: ");
+            System.out.print("> Please Input Employee ID (or 'e' to quit): ");
+            String input = scanner.nextLine().trim(); // Capture input as string
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting delete process..." + RESET);
+                return; // Exit the method
+            }
             try {
-                id = scanner.nextInt();
+                id = Integer.parseInt(input); // Parse after checking exit
                 break;
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Input Only Number");
-                scanner.nextLine();
             }
         }
         Employees employees = employeeDaoImpl.searchById(id);
@@ -315,11 +335,16 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
                 ╚════════════════════════════════════════╝\u001B[0m""");
 
         while (true) {
-            System.out.print("> Please Input Employee ID: ");
+            System.out.print("> Please Input Employee ID (or 'e' to quit): ");
+            String input = scanner.nextLine().trim(); // Use nextLine for consistency
+            if (input.equalsIgnoreCase("e")) {
+                System.out.println(YELLOW + "Exiting update process..." + RESET);
+                return; // Exit the method
+            }
             try {
-                id = scanner.nextInt();
+                id = Integer.parseInt(input); // Parse after checking exit
                 break;
-            } catch (InputMismatchException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Input Only Number");
             }
         }
@@ -329,7 +354,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         } else {
             System.out.println("Employee not found with ID: " + id);
         }
-        scanner.nextLine();
+
         while (true) {
             System.out.print("Input Department Id: ");
             String departmentId = scanner.nextLine().trim();
